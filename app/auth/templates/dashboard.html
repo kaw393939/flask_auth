@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+    {% from 'bootstrap5/form.html' import render_form, render_field, render_form_row %}
+
+    <h2>Dashboard</h2>
+    Welcome: {{ current_user.email }}
+{% endblock %}

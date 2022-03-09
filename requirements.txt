@@ -1,0 +1,15 @@
+setuptools
+wheel
+Flask
+pytest-cov
+pytest
+pycodestyle
+pytest-pylint
+gunicorn
+uwsgi
+Jinja2
+Werkzeug
+bootstrap-flask
+Flask-WTF
+flask_sqlalchemy
+flask-login
