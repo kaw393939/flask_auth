@@ -24,8 +24,11 @@ from flask_login import (
 )
 
 login_manager = LoginManager()
+
+
 def page_not_found(e):
     return render_template("404.html"), 404
+
 
 def create_app():
     """Create and configure an instance of the Flask application."""
@@ -33,14 +36,14 @@ def create_app():
     app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
     login_manager.init_app(app)
     login_manager.login_view = "auth.login"
-
+    csrf = CSRFProtect(app)
     bootstrap = Bootstrap5(app)
     app.register_blueprint(simple_pages)
     app.register_blueprint(auth)
     app.context_processor(utility_text_processors)
-    app.config['BOOTSTRAP_BOOTSWATCH_THEME'] = 'flatly'
-    app.register_error_handler(404,page_not_found)
-    #app.add_url_rule("/", endpoint="index")
+    app.config['BOOTSTRAP_BOOTSWATCH_THEME'] = 'Lux'
+    app.register_error_handler(404, page_not_found)
+    # app.add_url_rule("/", endpoint="index")
     db_dir = "database/db.sqlite"
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///" + os.path.abspath(db_dir)
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -48,8 +51,8 @@ def create_app():
     # add command function to cli commands
     app.cli.add_command(create_database)
 
-
     return app
+
 
 @login_manager.user_loader
 def user_loader(user_id):
