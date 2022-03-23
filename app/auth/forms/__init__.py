@@ -10,7 +10,7 @@ class login_form(FlaskForm):
 
     password = PasswordField('Password', [
         validators.DataRequired(),
-        validators.length(min=8, max=35)
+        validators.length(min=6, max=35)
     ])
     submit = SubmitField()
 

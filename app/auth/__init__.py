@@ -81,7 +81,11 @@ def edit_user(user_id):
 @auth.route('/users/<int:user_id>/delete', methods=['POST'])
 @login_required
 def delete_user(user_id):
-    pass
+    user = User.query.get(user_id)
+    db.session.delete(user)
+    db.session.commit()
+    flash('User Deleted')
+    return redirect('/users', 302)
 
 
 @auth.route('/users/new')
