@@ -8,6 +8,11 @@ from app.db.models import User
 
 auth = Blueprint('auth', __name__, template_folder='templates')
 
+@auth.route('/myprofile', methods=['POST', 'GET'])
+def my_profile():
+    user = User.query.get(current_user.get_id())
+
+
 
 @auth.route('/login', methods=['POST', 'GET'])
 def login():
@@ -85,7 +90,7 @@ def delete_user(user_id):
     db.session.delete(user)
     db.session.commit()
     flash('User Deleted')
-    return redirect('/users', 302)
+    return redirect('auth.browse_users', 302)
 
 
 @auth.route('/users/new')
