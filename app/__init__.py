@@ -41,7 +41,7 @@ def create_app():
     app.register_blueprint(simple_pages)
     app.register_blueprint(auth)
     app.context_processor(utility_text_processors)
-    app.config['BOOTSTRAP_BOOTSWATCH_THEME'] = 'Lux'
+    app.config['BOOTSTRAP_BOOTSWATCH_THEME'] = 'Simplex'
     app.register_error_handler(404, page_not_found)
     # app.add_url_rule("/", endpoint="index")
     db_dir = "database/db.sqlite"

@@ -128,7 +128,7 @@ def delete_user(user_id):
         return redirect(url_for('auth.browse_users'), 302)
     db.session.delete(user)
     db.session.commit()
-    flash('User Deleted')
+    flash('User Deleted', 'success')
     return redirect(url_for('auth.browse_users'), 302)
 
 
@@ -142,7 +142,7 @@ def edit_profile():
         user.about = form.about.data
         db.session.add(current_user)
         db.session.commit()
-        flash('You Successfully Updated your Profile')
+        flash('You Successfully Updated your Profile', 'success')
         return redirect(url_for('auth.dashboard'))
     return render_template('profile_edit.html', form=form)
 
@@ -155,6 +155,6 @@ def edit_security():
         user.password = form.password.data
         db.session.add(current_user)
         db.session.commit()
-        flash('You Successfully Updated your Password or Email')
+        flash('You Successfully Updated your Password or Email', 'success')
         return redirect(url_for('auth.dashboard'))
     return render_template('manage_account.html', form=form)
