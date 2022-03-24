@@ -59,7 +59,7 @@ def create_app():
     app.config["USER_EMAIL_SENDER_NAME"] = app.config["USER_APP_NAME"]
     app.config["USER_EMAIL_SENDER_EMAIL"] = "noreply@example.com"
     app.config['USER_ENABLE_EMAIL'] = False
-    user_manager = UserManager(app, db, User)
+    #user_manager = UserManager(app, db, User)
 
     db.init_app(app)
     # add command function to cli commands
