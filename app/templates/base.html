@@ -45,8 +45,9 @@
                 </div>
                 <div class="navbar-nav d-flex">
                     {% if current_user.is_authenticated %}
-                        {{ render_nav_item('auth.logout','Logout' ) }}
                         {{ render_nav_item('auth.edit_profile','My Profile' ) }}
+                        {{ render_nav_item('auth.edit_security','Manage Account' ) }}
+                        {{ render_nav_item('auth.logout','Logout' ) }}
                     {% else %}
                         {{ render_nav_item('auth.register','Register' ) }}
                         {{ render_nav_item('auth.login','Login' ) }}

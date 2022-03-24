@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_user, login_required, logout_user, current_user
 from sqlalchemy.orm import load_only
 from werkzeug.security import generate_password_hash
-from app.auth.forms import login_form, register_form
+from app.auth.forms import login_form, register_form, profile_form, security_form
 from app.db import db
 from app.db.models import User
 
@@ -123,8 +123,7 @@ def add_user():
 @login_required
 def delete_user(user_id):
     user = User.query.get(user_id)
-    logged_in_user = current_user
-    if user.id == logged_in_user.id:
+    if user.id == current_user.id:
         flash("You can't delete yourself!")
         return redirect(url_for('auth.browse_users'), 302)
     db.session.delete(user)
@@ -136,12 +135,26 @@ def delete_user(user_id):
 @auth.route('/profile', methods=['POST', 'GET'])
 def edit_profile():
     user = User.query.get(current_user.get_id())
-    form = register_form(obj=user)
+    form = profile_form(obj=user)
     if form.validate_on_submit():
         user.email = form.email.data
         user.password = form.password.data
-        db.session.add(user)
+        user.about = form.about.data
+        db.session.add(current_user)
         db.session.commit()
         flash('You Successfully Updated your Profile')
         return redirect(url_for('auth.dashboard'))
     return render_template('profile_edit.html', form=form)
+
+@auth.route('/security', methods=['POST', 'GET'])
+def edit_security():
+    user = User.query.get(current_user.get_id())
+    form = security_form(obj=user)
+    if form.validate_on_submit():
+        user.email = form.email.data
+        user.password = form.password.data
+        db.session.add(current_user)
+        db.session.commit()
+        flash('You Successfully Updated your Password or Email')
+        return redirect(url_for('auth.dashboard'))
+    return render_template('manage_account.html', form=form)
