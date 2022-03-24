@@ -34,6 +34,12 @@ class User(UserMixin, db.Model):
     def get_id(self):
         return unicode(self.id)
 
+    def get_user_by_token(self):
+        try:
+            return User.query.get(int(current_user.get_id()))
+        except:
+            return None
+
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
