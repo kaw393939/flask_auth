@@ -8,9 +8,6 @@ from app.db.models import User
 
 auth = Blueprint('auth', __name__, template_folder='templates')
 
-@auth.route('/myprofile', methods=['POST', 'GET'])
-def my_profile():
-    user = User.query.get(current_user.get_id())
 
 @auth.route('/login', methods=['POST', 'GET'])
 def login():
@@ -51,7 +48,7 @@ def register():
     return render_template('register.html', form=form)
 
 
-@auth.route('/dashboard', methods=['POST', 'GET'])
+@auth.route('/dashboard')
 @login_required
 def dashboard():
     return render_template('dashboard.html')
@@ -67,6 +64,19 @@ def logout():
     db.session.commit()
     logout_user()
     return redirect(url_for('auth.login'))
+
+
+@auth.route('/users')
+@login_required
+def browse_users():
+    data = User.query.all()
+    titles = [('email', 'Email'), ('registered_on', 'Registered On')]
+    retrieve_url = ('auth.retrieve_user', [('user_id', ':id')])
+    edit_url = ('auth.edit_user', [('user_id', ':id')])
+    add_url = url_for('auth.add_user')
+    delete_url = ('auth.delete_user', [('user_id', ':id')])
+    return render_template('browse.html', titles=titles, add_url=add_url, edit_url=edit_url, delete_url=delete_url,
+                           retrieve_url=retrieve_url, data=data, User=User, record_type="Users")
 
 
 @auth.route('/users/<int:user_id>')
@@ -91,20 +101,6 @@ def edit_user(user_id):
     return render_template('profile_edit.html', form=form)
 
 
-@auth.route('/users/<int:user_id>/delete', methods=['POST'])
-@login_required
-def delete_user(user_id):
-    user = User.query.get(user_id)
-    logged_in_user = current_user
-    if user.id == logged_in_user.id:
-        flash("You can't delete yourself!")
-        return redirect(url_for('auth.browse_users'), 302)
-    db.session.delete(user)
-    db.session.commit()
-    flash('User Deleted')
-    return redirect(url_for('auth.browse_users'), 302)
-
-
 @auth.route('/users/new', methods=['POST', 'GET'])
 @login_required
 def add_user():
@@ -122,14 +118,30 @@ def add_user():
             return redirect(url_for('auth.browse_users'))
     return render_template('profile_new.html', form=form)
 
-@auth.route('/users')
+
+@auth.route('/users/<int:user_id>/delete', methods=['POST'])
 @login_required
-def browse_users():
-    data = User.query.all()
-    titles = [('email', 'Email'), ('registered_on', 'Registered On')]
-    retrieve_url = ('auth.retrieve_user', [('user_id', ':id')])
-    edit_url = ('auth.edit_user', [('user_id', ':id')])
-    add_url = url_for('auth.add_user')
-    delete_url = ('auth.delete_user', [('user_id', ':id')])
-    return render_template('browse.html', titles=titles, add_url=add_url, edit_url=edit_url, delete_url=delete_url,
-                           retrieve_url=retrieve_url, data=data, User=User, record_type="Users")
+def delete_user(user_id):
+    user = User.query.get(user_id)
+    logged_in_user = current_user
+    if user.id == logged_in_user.id:
+        flash("You can't delete yourself!")
+        return redirect(url_for('auth.browse_users'), 302)
+    db.session.delete(user)
+    db.session.commit()
+    flash('User Deleted')
+    return redirect(url_for('auth.browse_users'), 302)
+
+
+@auth.route('/profile', methods=['POST', 'GET'])
+def edit_profile():
+    user = User.query.get(current_user.get_id())
+    form = register_form(obj=user)
+    if form.validate_on_submit():
+        user.email = form.email.data
+        user.password = form.password.data
+        db.session.add(user)
+        db.session.commit()
+        flash('You Successfully Updated your Profile')
+        return redirect(url_for('auth.dashboard'))
+    return render_template('profile_edit.html', form=form)
