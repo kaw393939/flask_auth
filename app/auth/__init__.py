@@ -111,7 +111,7 @@ def add_user():
             user = User(email=form.email.data, password=generate_password_hash(form.password.data))
             db.session.add(user)
             db.session.commit()
-            flash('Congratulations, you just created a user')
+            flash('Congratulations, you just created a user', 'success')
             return redirect(url_for('auth.browse_users'))
         else:
             flash('Already Registered')
@@ -137,8 +137,6 @@ def edit_profile():
     user = User.query.get(current_user.get_id())
     form = profile_form(obj=user)
     if form.validate_on_submit():
-        user.email = form.email.data
-        user.password = form.password.data
         user.about = form.about.data
         db.session.add(current_user)
         db.session.commit()
