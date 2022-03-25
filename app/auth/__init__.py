@@ -4,8 +4,8 @@ from sqlalchemy.orm import load_only
 from werkzeug.security import generate_password_hash
 from app.auth.forms import login_form, register_form, profile_form, security_form
 from app.db import db
-from app.db.models import User
-
+from app.db.models import User, Role
+from flask_authorize import Authorize
 auth = Blueprint('auth', __name__, template_folder='templates')
 
 
@@ -39,6 +39,13 @@ def register():
         if user is None:
             user = User(email=form.email.data, password=generate_password_hash(form.password.data))
             db.session.add(user)
+            if user.id == 1:
+                role = Role(
+                    name='admin'
+                )
+                user.roles = [role]
+                db.session.add(role, user)
+
             db.session.commit()
             flash('Congratulations, you are now a registered user!')
             return redirect(url_for('auth.login'))
@@ -68,6 +75,7 @@ def logout():
 
 @auth.route('/users')
 @login_required
+@Authorize.has_role('admin')
 def browse_users():
     data = User.query.all()
     titles = [('email', 'Email'), ('registered_on', 'Registered On')]
@@ -81,6 +89,7 @@ def browse_users():
 
 @auth.route('/users/<int:user_id>')
 @login_required
+
 def retrieve_user(user_id):
     user = User.query.get(user_id)
     return render_template('profile_view.html', user=user)
@@ -146,8 +155,8 @@ def edit_profile():
         return redirect(url_for('auth.dashboard'))
     return render_template('profile_edit.html', form=form)
 
-@auth.route('/security', methods=['POST', 'GET'])
-def edit_security():
+@auth.route('/account', methods=['POST', 'GET'])
+def edit_account():
     user = User.query.get(current_user.get_id())
     form = security_form(obj=user)
     if form.validate_on_submit():
