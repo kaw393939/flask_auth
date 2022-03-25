@@ -2,9 +2,10 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_user, login_required, logout_user, current_user
 from sqlalchemy.orm import load_only
 from werkzeug.security import generate_password_hash
-from app.auth.forms import login_form, register_form, profile_form, security_form
+from app.auth.forms import login_form, register_form, profile_form, security_form, user_edit_form
 from app.db import db
 from app.db.models import User
+
 auth = Blueprint('auth', __name__, template_folder='templates')
 
 
@@ -39,7 +40,7 @@ def register():
             user = User(email=form.email.data, password=generate_password_hash(form.password.data))
             db.session.add(user)
             db.session.commit()
-            flash('Congratulations, you are now a registered user!')
+            flash('Congratulations, you are now a registered user!', "success")
             return redirect(url_for('auth.login'))
         else:
             flash('Already Registered')
@@ -80,7 +81,6 @@ def browse_users():
 
 @auth.route('/users/<int:user_id>')
 @login_required
-
 def retrieve_user(user_id):
     user = User.query.get(user_id)
     return render_template('profile_view.html', user=user)
@@ -90,15 +90,15 @@ def retrieve_user(user_id):
 @login_required
 def edit_user(user_id):
     user = User.query.get(user_id)
-    form = register_form(obj=user)
+    form = user_edit_form(obj=user)
     if form.validate_on_submit():
-        user.email = form.email.data
-        user.password = form.password.data
+        user.about = form.about.data
+        user.is_admin = int(form.is_admin.data)
         db.session.add(user)
         db.session.commit()
-        flash('User Edited Successfully')
+        flash('User Edited Successfully', 'success')
         return redirect(url_for('auth.browse_users'))
-    return render_template('profile_edit.html', form=form)
+    return render_template('user_edit.html', form=form)
 
 
 @auth.route('/users/new', methods=['POST', 'GET'])
@@ -116,7 +116,7 @@ def add_user():
         else:
             flash('Already Registered')
             return redirect(url_for('auth.browse_users'))
-    return render_template('profile_new.html', form=form)
+    return render_template('user_new.html', form=form)
 
 
 @auth.route('/users/<int:user_id>/delete', methods=['POST'])
@@ -143,6 +143,7 @@ def edit_profile():
         flash('You Successfully Updated your Profile', 'success')
         return redirect(url_for('auth.dashboard'))
     return render_template('profile_edit.html', form=form)
+
 
 @auth.route('/account', methods=['POST', 'GET'])
 def edit_account():
