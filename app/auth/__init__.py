@@ -5,8 +5,10 @@ from werkzeug.security import generate_password_hash
 from app.auth.forms import login_form, register_form, profile_form, security_form, user_edit_form
 from app.db import db
 from app.db.models import User
-
+from app.auth.decorators import admin_required
 auth = Blueprint('auth', __name__, template_folder='templates')
+
+
 
 
 @auth.route('/login', methods=['POST', 'GET'])
@@ -41,10 +43,10 @@ def register():
             db.session.add(user)
             db.session.commit()
             flash('Congratulations, you are now a registered user!', "success")
-            return redirect(url_for('auth.login'))
+            return redirect(url_for('auth.login'), 302)
         else:
             flash('Already Registered')
-            return redirect(url_for('auth.login'))
+            return redirect(url_for('auth.login'), 302)
     return render_template('register.html', form=form)
 
 
@@ -68,6 +70,7 @@ def logout():
 
 @auth.route('/users')
 @login_required
+@admin_required
 def browse_users():
     data = User.query.all()
     titles = [('email', 'Email'), ('registered_on', 'Registered On')]
@@ -157,3 +160,5 @@ def edit_account():
         flash('You Successfully Updated your Password or Email', 'success')
         return redirect(url_for('auth.dashboard'))
     return render_template('manage_account.html', form=form)
+
+
