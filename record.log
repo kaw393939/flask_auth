@@ -1,0 +1,13 @@
+2022-03-29 16:32:39,928 INFO werkzeug MainThread :  * Detected change in '/home/myuser/app/auth/__init__.py', reloading
+2022-03-29 16:32:49,297 INFO werkzeug Thread-3 : 172.29.0.1 - - [29/Mar/2022 16:32:49] "[35m[1mGET /users HTTP/1.1[0m" 500 -
+2022-03-29 16:32:49,323 INFO werkzeug Thread-3 : 172.29.0.1 - - [29/Mar/2022 16:32:49] "[36mGET /bootstrap/static/icons/bootstrap-icons.svg HTTP/1.1[0m" 304 -
+2022-03-29 16:32:49,476 INFO werkzeug Thread-4 : 172.29.0.1 - - [29/Mar/2022 16:32:49] "GET /users?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2022-03-29 16:32:49,488 INFO werkzeug Thread-5 : 172.29.0.1 - - [29/Mar/2022 16:32:49] "GET /users?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2022-03-29 16:32:49,496 INFO werkzeug Thread-4 : 172.29.0.1 - - [29/Mar/2022 16:32:49] "GET /users?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2022-03-29 16:33:46,408 INFO werkzeug MainThread :  * Detected change in '/home/myuser/app/auth/__init__.py', reloading
+2022-03-29 16:34:14,217 INFO werkzeug MainThread :  * Detected change in '/home/myuser/app/auth/__init__.py', reloading
+2022-03-29 16:34:16,988 INFO app Thread-3 : Info level log
+2022-03-29 16:34:16,989 WARNING app Thread-3 : Warning level log
+2022-03-29 16:34:17,237 INFO werkzeug Thread-3 : 172.29.0.1 - - [29/Mar/2022 16:34:17] "GET /users HTTP/1.1" 200 -
+2022-03-29 16:34:17,430 INFO werkzeug Thread-3 : 172.29.0.1 - - [29/Mar/2022 16:34:17] "[36mGET /bootstrap/static/icons/bootstrap-icons.svg HTTP/1.1[0m" 304 -
+2022-03-29 16:35:27,708 INFO werkzeug MainThread :  * Detected change in '/home/myuser/app/__init__.py', reloading

@@ -10,7 +10,6 @@ import hmac
 from hashlib import sha512
 from functools import wraps
 from werkzeug.local import LocalProxy
-#from werkzeug.security import safe_str_cmp
 from werkzeug.urls import url_decode, url_encode
 
 from flask import (_request_ctx_stack, current_app, request, session, url_for,
