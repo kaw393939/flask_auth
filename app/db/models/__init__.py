@@ -1,13 +1,8 @@
 from datetime import datetime
 
-from flask_login._compat import unicode
 from werkzeug.security import check_password_hash, generate_password_hash
 from app.db import db
 from flask_login import UserMixin
-
-
-
-
 
 
 class User(UserMixin, db.Model):
@@ -40,7 +35,7 @@ class User(UserMixin, db.Model):
         return False
 
     def get_id(self):
-        return unicode(self.id)
+        return self.id
 
     def set_password(self, password):
         self.password = generate_password_hash(password)

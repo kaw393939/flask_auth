@@ -1,6 +1,8 @@
 from os import getenv
 import datetime
 from app.auth.forms import login_form
+
+
 def utility_text_processors():
     message = "hello world"
     form = login_form()
@@ -18,11 +20,9 @@ def utility_text_processors():
         return f"{currency}{amount:.2f}"
 
     return dict(
-        form = form,
+        form=form,
         mymessage=message,
         deployment_environment=deployment_environment(),
         year=current_year(),
         format_price=format_price
     )
-
-
