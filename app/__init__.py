@@ -76,12 +76,11 @@ def create_app():
     # set name of the log file
     log_file = os.path.join(logdir, 'app-warning.log')
 
-    # Create a log file file formatter object to create the entry in the log
+    # Create a log file formatter object to create the entry in the log
     formatter = RequestFormatter(
         '[%(asctime)s] %(remote_addr)s requested %(url)s\n'
         '%(levelname)s in %(module)s: %(message)s'
     )
-
     handler = logging.FileHandler(log_file)
     # set the formatter for the log entry
     handler.setFormatter(formatter)
