@@ -73,14 +73,14 @@ def create_app():
     if not os.path.exists(logdir):
         os.mkdir(logdir)
     # set name of the log file
-    log_file = os.path.join(logdir, 'app-warning.log')
+    log_file = os.path.join(logdir, 'info.log')
 
+    handler = logging.FileHandler(log_file)
     # Create a log file formatter object to create the entry in the log
     formatter = RequestFormatter(
         '[%(asctime)s] %(remote_addr)s requested %(url)s\n'
         '%(levelname)s in %(module)s: %(message)s'
     )
-    handler = logging.FileHandler(log_file)
     # set the formatter for the log entry
     handler.setFormatter(formatter)
     # Set the logging level of the file handler object so that it logs INFO and up
@@ -130,8 +130,8 @@ def create_app():
             part = name + ': ' + str(value) + ', '
             parts.append(part)
         line = " ".join(parts)
-
-        app.logger.info(line)
+        #this triggers a log entry to be created with whatever is in the line variable
+        app.logger.info('this is the plain message')
 
         return response
 
