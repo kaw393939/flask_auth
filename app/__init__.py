@@ -4,7 +4,6 @@ import os
 import datetime
 import time
 
-import colors
 from flask import g, request
 from rfc3339 import rfc3339
 
