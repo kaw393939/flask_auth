@@ -21,25 +21,12 @@ from app.exceptions import http_exceptions
 from app.simple_pages import simple_pages
 import logging
 from flask.logging import default_handler
-
+from app.log_formatters import RequestFormatter
 login_manager = flask_login.LoginManager()
 
 
 def page_not_found(e):
     return render_template("404.html"), 404
-
-
-class RequestFormatter(logging.Formatter):
-    def format(self, record):
-        if has_request_context():
-            record.url = request.url
-            record.remote_addr = request.remote_addr
-        else:
-            record.url = None
-            record.remote_addr = None
-
-        return super().format(record)
-
 
 def create_app():
     """Create and configure an instance of the Flask application."""
@@ -77,10 +64,10 @@ def create_app():
 
     handler = logging.FileHandler(log_file)
     # Create a log file formatter object to create the entry in the log
-    formatter = RequestFormatter(
-        '[%(asctime)s] %(remote_addr)s requested %(url)s\n'
-        '%(levelname)s in %(module)s: %(message)s'
+    formatter = RequestFormatter('%(levelname)s,%(asctime)s,%(module)s,%(message)s,%(remote_addr)s,%(url)s,%(request_method)s,'
+        '%(request_path)s,%(ip)s, %(host)s'
     )
+
     # set the formatter for the log entry
     handler.setFormatter(formatter)
     # Set the logging level of the file handler object so that it logs INFO and up
@@ -90,6 +77,7 @@ def create_app():
 
     @app.before_request
     def start_timer():
+        app.logger.info("none")
         g.start = time.time()
 
     @app.after_request
@@ -100,43 +88,8 @@ def create_app():
             return response
         elif request.path.startswith('/bootstrap'):
             return response
-
-        now = time.time()
-        duration = round(now - g.start, 2)
-        dt = datetime.datetime.fromtimestamp(now)
-        timestamp = rfc3339(dt, utc=True)
-
-        ip = request.headers.get('X-Forwarded-For', request.remote_addr)
-        host = request.host.split(':', 1)[0]
-        args = dict(request.args)
-
-        log_params = [
-            ('method', request.method),
-            ('path', request.path),
-            ('status', response.status_code),
-            ('duration', duration),
-            ('time', timestamp),
-            ('ip', ip),
-            ('host', host),
-            ('params', args)
-        ]
-
-        request_id = request.headers.get('X-Request-ID')
-        if request_id:
-            log_params.append(('request_id', request_id))
-
-        parts = []
-        for name, value in log_params:
-            part = name + ': ' + str(value) + ', '
-            parts.append(part)
-        line = " ".join(parts)
-        #this triggers a log entry to be created with whatever is in the line variable
-        app.logger.info('this is the plain message')
-
         return response
-
     return app
-
 
 @login_manager.user_loader
 def user_loader(user_id):
