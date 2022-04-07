@@ -31,9 +31,12 @@ def page_not_found(e):
 
 class RequestFormatter(logging.Formatter):
     def format(self, record):
+
         if has_request_context():
             record.url = request.url
             record.remote_addr = request.remote_addr
+            record.method = request.method
+            record.path = request.path
         else:
             record.url = None
             record.remote_addr = None
@@ -78,8 +81,7 @@ def create_app():
     handler = logging.FileHandler(log_file)
     # Create a log file formatter object to create the entry in the log
     formatter = RequestFormatter(
-        '[%(asctime)s] %(remote_addr)s requested %(url)s\n'
-        '%(levelname)s in %(module)s: %(message)s'
+        '%(levelname)s, %(method)s, %(path)s, %(message)s'
     )
     # set the formatter for the log entry
     handler.setFormatter(formatter)
@@ -124,15 +126,14 @@ def create_app():
         request_id = request.headers.get('X-Request-ID')
         if request_id:
             log_params.append(('request_id', request_id))
-
+        #this is preparing the parameters to be turned into a log message
         parts = []
         for name, value in log_params:
             part = name + ': ' + str(value) + ', '
             parts.append(part)
-        line = " ".join(parts)
+        log_message = " ".join(parts)
         #this triggers a log entry to be created with whatever is in the line variable
-        app.logger.info('this is the plain message')
-
+        app.logger.info(log_message)
         return response
 
     return app

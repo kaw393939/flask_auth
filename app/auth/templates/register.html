@@ -3,12 +3,49 @@
     {% from 'bootstrap5/form.html' import render_form, render_field, render_form_row %}
 
     <div class="row">
-
-         <div class="col-7 mx-auto">
-             <h2>Register</h2>
-             {{ render_form(form) }}
-         </div>
+        <div class="col-7">
+            <h2>Register</h2>
+            {{ render_form(form) }}
+        </div>
+        <div id="message" class="col-5">
+            <div id="letter" class="red">
+                Has lower case letter
+            </div>
+        </div>
     </div>
+    <style>
+        .invalid {
+            color: red;
+        }
+        .valid {
+            color: green;
+        }
+    </style>
 
+
+    <script>
+        var passwordField = document.getElementById("password")
+        var letter = document.getElementById("letter")
+
+        passwordField.onfocus = function () {
+            var message = document.getElementById("message");
+            message.style.display = "block";
+            message.style.border = "1px solid";
+        }
+
+        passwordField.onkeyup = function () {
+            // Validate lowercase letters
+            var lowerCaseLetters = /[a-z]/g;
+            if (passwordField.value.match(lowerCaseLetters)) {
+                letter.classList.remove("invalid");
+                letter.classList.add("valid");
+            } else {
+                letter.classList.remove("valid");
+                letter.classList.add("invalid");
+            }
+        }
+
+
+    </script>
 
 {% endblock %}

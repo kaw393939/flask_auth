@@ -108,6 +108,7 @@ def edit_user(user_id):
         db.session.add(user)
         db.session.commit()
         flash('User Edited Successfully', 'success')
+        current_app.logger.info("edited a user")
         return redirect(url_for('auth.browse_users'))
     return render_template('user_edit.html', form=form)
 
