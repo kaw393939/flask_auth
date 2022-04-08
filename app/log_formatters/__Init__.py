@@ -1,5 +1,4 @@
 import logging
-
 from flask import has_request_context, request
 
 
@@ -12,6 +11,8 @@ class RequestFormatter(logging.Formatter):
             record.request_path = request.path
             record.ip = request.headers.get('X-Forwarded-For', request.remote_addr)
             record.host = request.host.split(':', 1)[0]
+            record.args = dict(request.args)
+
         else:
             record.url = None
             record.remote_addr = None

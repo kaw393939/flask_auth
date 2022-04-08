@@ -13,7 +13,7 @@ from flask_wtf.csrf import CSRFProtect
 
 from app.auth import auth
 from app.auth import auth
-from app.cli import create_database
+from app.cli import create_database, create_log_folder
 from app.context_processors import utility_text_processors
 from app.db import db
 from app.db.models import User
@@ -48,6 +48,7 @@ def create_app():
     db.init_app(app)
     # add command function to cli commands
     app.cli.add_command(create_database)
+    app.cli.add_command(create_log_folder)
 
     # Deactivate the default flask logger so that log messages don't get duplicated
     app.logger.removeHandler(default_handler)
@@ -65,7 +66,7 @@ def create_app():
     handler = logging.FileHandler(log_file)
     # Create a log file formatter object to create the entry in the log
     formatter = RequestFormatter('%(levelname)s,%(asctime)s,%(module)s,%(message)s,%(remote_addr)s,%(url)s,%(request_method)s,'
-        '%(request_path)s,%(ip)s, %(host)s'
+        '%(request_path)s,%(ip)s,%(host)s,%(args)s'
     )
 
     # set the formatter for the log entry
@@ -77,7 +78,6 @@ def create_app():
 
     @app.before_request
     def start_timer():
-        app.logger.info("none")
         g.start = time.time()
 
     @app.after_request
@@ -88,6 +88,7 @@ def create_app():
             return response
         elif request.path.startswith('/bootstrap'):
             return response
+        app.logger.info("none")
         return response
     return app
 
