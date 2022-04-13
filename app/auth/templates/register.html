@@ -11,7 +11,8 @@
             <div id="letter" class="red">
                 Has lower case letter
                 <div class="progress">
-                    <div id="p-bar" class="progress-bar" style="width: 0%" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div id="p-bar" class="progress-bar" style="width: 0%" role="progressbar" aria-valuenow="0"
+                         aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
             </div>
 
@@ -31,35 +32,118 @@
     <script>
         var passwordField = document.getElementById("password");
         var letter = document.getElementById("letter");
-        var lowerCase = 0;
+        let lowerCase = new Observable(0);
+        let upperCase = new Observable(0);
+        let specialCharacter = new Observable(0);
+        let passwordLength = new Observable(0);
 
-        passwordField.onfocus = function () {
-            var message = document.getElementById("message");
-            message.style.display = "block";
-            message.style.border = "1px solid";
+        let id = "p-bar";
+
+        function Observable(v) {
+            this.value = v;
+
+            this.valueChangedCallback = null;
+
+            this.setValue = function (v) {
+                if (this.value !== v) {
+                    this.value = v;
+                    this.raiseChangedEvent(v);
+                }
+            };
+
+            this.getValue = function () {
+                return this.value;
+            };
+
+            this.onChange = function (callback) {
+                this.valueChangedCallback = callback;
+            };
+
+            this.raiseChangedEvent = function (v) {
+                if (this.valueChangedCallback) {
+                    this.valueChangedCallback(v);
+                }
+            };
         }
 
+
+
+        function setProgressBarWidth(id,change) {
+            let progress_bar = document.getElementById(id);
+            let progressBarCurrentWidth_string = progress_bar.style.width.toString()
+            let width_current_value = parseInt(progressBarCurrentWidth_string.substring(0, progressBarCurrentWidth_string.length - 1));
+
+            let width_string_new_value = width_current_value + change;
+            console.log(width_string_new_value);
+            progress_bar.style.width = width_string_new_value.toString().concat("%");
+        }
+
+        lowerCase.onChange(function (v) {
+
+            if(v === 0) {
+                setProgressBarWidth(id,-25)
+            } else {
+                setProgressBarWidth(id,+25)
+            }
+        });
+
+        passwordLength.onChange(function (v) {
+
+            if(v === 0) {
+                setProgressBarWidth(id,-25)
+            } else {
+                setProgressBarWidth(id,+25)
+            }
+        });
+
+        upperCase.onChange(function (v) {
+
+            if(v === 0) {
+                setProgressBarWidth(id,-25)
+            } else {
+                setProgressBarWidth(id,+25)
+            }
+        });
+
+        specialCharacter.onChange(function (v) {
+
+            if(v === 0) {
+                setProgressBarWidth(id,-25)
+            } else {
+                setProgressBarWidth(id,+25)
+            }
+        });
+
+
         passwordField.onkeyup = function () {
-            var progress_bar = document.getElementById("p-bar");
             // Validate lowercase letters
             let lowerCaseLetters = /[a-z]/g;
-            let new_width_value;
-            if(lowerCase === 0) {
-                let p_bar_width_string = progress_bar.style.width;
-                let width_current_value = parseInt(p_bar_width_string.substring(0, p_bar_width_string.length - 1));
-                width_current_value = width_current_value + 33;
-                let width_string_new_value = width_current_value.toString();
-                new_width_value = width_string_new_value.concat("%");
+            let upperCaseLetters = /[A-Z]/g;
+            let specialCharacters = /[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi;
+            let passwordMinLength = 6;
+
+            if(passwordField.value.length >= passwordMinLength) {
+                passwordLength.setValue(1);
             } else {
-                new_width_value = progress_bar.style.width;
+                passwordLength.setValue(0);
             }
+
             if (passwordField.value.match(lowerCaseLetters)) {
-                progress_bar.style.width = new_width_value;
-                lowerCase = 1;
+                lowerCase.setValue(1);
             } else {
-                progress_bar.style.width = "0%";
-                lowerCase = 0;
+                lowerCase.setValue(0);
             }
+            if (passwordField.value.match(upperCaseLetters)) {
+                upperCase.setValue(1);
+            } else {
+                upperCase.setValue(0);
+            }
+            if (passwordField.value.match(specialCharacters)) {
+                specialCharacter.setValue(1);
+            } else {
+                specialCharacter.setValue(0);
+            }
+
         }
 
 
