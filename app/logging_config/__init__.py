@@ -1,12 +1,11 @@
 import logging
-import os
-import time
-from logging.handlers import RotatingFileHandler
+from logging.config import dictConfig
 
 import flask
-from flask import request, g, current_app
+from flask import request, current_app
+
 from app.logging_config.log_formatters import RequestFormatter
-from logging.config import dictConfig
+
 log_con = flask.Blueprint('log_con', __name__)
 
 
@@ -66,7 +65,14 @@ LOGGING_CONFIG = {
         'file.handler': {
             'class': 'logging.handlers.RotatingFileHandler',
             'formatter': 'standard',
-            'filename': 'app/logs/normal.log',
+            'filename': 'app/logs/flask.log',
+            'maxBytes': 10000000,
+            'backupCount': 5,
+        },
+        'file.handler.myapp': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'formatter': 'standard',
+            'filename': 'app/logs/myapp.log',
             'maxBytes': 10000000,
             'backupCount': 5,
         },
@@ -121,7 +127,7 @@ LOGGING_CONFIG = {
             'propagate': False
         },
         'myApp': {  # if __name__ == '__main__'
-            'handlers': ['file.handler'],
+            'handlers': ['file.handler.myapp'],
             'level': 'DEBUG',
             'propagate': False
         },
