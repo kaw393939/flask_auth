@@ -6,7 +6,7 @@ from logging.handlers import RotatingFileHandler
 import flask
 from flask import request, g, current_app
 from app.logging_config.log_formatters import RequestFormatter
-
+from logging.config import dictConfig
 log_con = flask.Blueprint('log_con', __name__)
 
 
