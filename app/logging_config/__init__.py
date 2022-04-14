@@ -5,7 +5,6 @@ from logging.handlers import RotatingFileHandler
 
 import flask
 from flask import request, g, current_app
-from logging.config import dictConfig
 from app.logging_config.log_formatters import RequestFormatter
 
 log_con = flask.Blueprint('log_con', __name__)
@@ -38,6 +37,9 @@ def configure_logging():
     logging.config.dictConfig(LOGGING_CONFIG)
     log = logging.getLogger("myApp")
     log.info("My App Logger")
+    log = logging.getLogger("myerrors")
+    log.info("THis broke")
+
 
 
 
@@ -75,6 +77,13 @@ LOGGING_CONFIG = {
             'maxBytes': 10000000,
             'backupCount': 5,
         },
+        'file.handler.errors': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'formatter': 'standard',
+            'filename': 'app/logs/errors.log',
+            'maxBytes': 10000000,
+            'backupCount': 5,
+        },
     },
     'loggers': {
         '': {  # root logger
@@ -87,8 +96,18 @@ LOGGING_CONFIG = {
             'level': 'DEBUG',
             'propagate': True
         },
+        'werkzeug': {  # if __name__ == '__main__'
+            'handlers': ['file.handler.custom'],
+            'level': 'DEBUG',
+            'propagate': False
+        },
         'myApp': {  # if __name__ == '__main__'
             'handlers': ['file.handler.custom'],
+            'level': 'DEBUG',
+            'propagate': False
+        },
+        'myerrors': {  # if __name__ == '__main__'
+            'handlers': ['file.handler.errors'],
             'level': 'DEBUG',
             'propagate': False
         },
