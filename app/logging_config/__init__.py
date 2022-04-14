@@ -70,10 +70,10 @@ LOGGING_CONFIG = {
             'maxBytes': 10000000,
             'backupCount': 5,
         },
-        'file.handler.custom': {
+        'file.handler.request': {
             'class': 'logging.handlers.RotatingFileHandler',
             'formatter': 'RequestFormatter',
-            'filename': 'app/logs/custom.log',
+            'filename': 'app/logs/request.log',
             'maxBytes': 10000000,
             'backupCount': 5,
         },
@@ -81,6 +81,20 @@ LOGGING_CONFIG = {
             'class': 'logging.handlers.RotatingFileHandler',
             'formatter': 'standard',
             'filename': 'app/logs/errors.log',
+            'maxBytes': 10000000,
+            'backupCount': 5,
+        },
+        'file.handler.sqlalchemy': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'formatter': 'standard',
+            'filename': 'app/logs/sqlalchemy.log',
+            'maxBytes': 10000000,
+            'backupCount': 5,
+        },
+        'file.handler.werkzeug': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'formatter': 'standard',
+            'filename': 'app/logs/werkzeug.log',
             'maxBytes': 10000000,
             'backupCount': 5,
         },
@@ -97,12 +111,17 @@ LOGGING_CONFIG = {
             'propagate': True
         },
         'werkzeug': {  # if __name__ == '__main__'
-            'handlers': ['file.handler.custom'],
+            'handlers': ['file.handler.werkzeug'],
             'level': 'DEBUG',
             'propagate': False
         },
+        'sqlalchemy.engine': {  # if __name__ == '__main__'
+            'handlers': ['file.handler.sqlalchemy'],
+            'level': 'INFO',
+            'propagate': False
+        },
         'myApp': {  # if __name__ == '__main__'
-            'handlers': ['file.handler.custom'],
+            'handlers': ['file.handler'],
             'level': 'DEBUG',
             'propagate': False
         },
