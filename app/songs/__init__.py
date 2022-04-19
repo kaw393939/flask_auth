@@ -32,10 +32,10 @@ def songs_upload():
         filename = secure_filename(form.file.data.filename)
         filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
         form.file.data.save(filepath)
-        user = current_user
         with open(filepath) as file:
             csv_file = csv.DictReader(file)
             for row in csv_file:
+                user = current_user
                 user.songs = [Song(row['title'])]
         db.session.commit()
         return redirect(url_for('songs.songs_browse'))
