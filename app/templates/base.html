@@ -33,6 +33,9 @@
                     <div class="navbar-nav mr-auto">
                         {% if current_user.is_authenticated %}
                             {{ render_nav_item('auth.dashboard','Dashboard' ) }}
+                            {{ render_nav_item('songs.songs_browse','My Songs' ) }}
+                            {{ render_nav_item('songs.songs_upload','Upload Songs' ) }}
+
                             {% if current_user.is_admin %}
                                 {{ render_nav_item('auth.browse_users','User Management' ) }}
                             {% endif %}
