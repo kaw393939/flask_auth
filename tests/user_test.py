@@ -1,13 +1,7 @@
 from app import db
 from app.db.models import User, Song
-from faker import Faker
 
 def test_adding_user(application):
-    Faker.seed(4321)
-    fake = Faker()
-    for _ in range(10):
-        print(fake.email())
-
     with application.app_context():
         assert db.session.query(User).count() == 0
         assert db.session.query(Song).count() == 0
@@ -25,11 +19,11 @@ def test_adding_user(application):
         #asserting that the user retrieved is correct
         assert user.email == 'keith@webizly.com'
         #this is how you get a related record ready for insert
-        user.songs= [Song("test")]
+        user.songs= [Song("MyTitle","Joe Joe")]
         db.session.commit()
         assert db.session.query(Song).count() == 1
-        song1 = Song.query.filter_by(title='test').first()
-        assert song1.title == "test"
+        song1 = Song.query.filter_by(title='MyTitle').first()
+        assert song1.title == "MyTitle"
         #changing the title of the song
         song1.title = "spam"
         #saving the new title of the song

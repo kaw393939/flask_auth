@@ -10,11 +10,14 @@ class Song(db.Model):
     __tablename__ = 'songs'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(300), nullable=True, unique=False)
+    artist = db.Column(db.String(300), nullable=True, unique=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = relationship("User", back_populates="songs")
 
-    def __init__(self, title):
+    #add fields to the constructor to make them on create
+    def __init__(self, title, artist):
         self.title = title
+        self.artist = artist
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'

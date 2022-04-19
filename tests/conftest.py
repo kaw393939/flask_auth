@@ -24,7 +24,7 @@ def application():
         yield application
         db.session.remove()
         #drops the database tables after the test runs
-        #db.drop_all()
+        db.drop_all()
 
 
 
