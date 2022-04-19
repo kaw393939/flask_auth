@@ -7,7 +7,7 @@ class Config(object):
     SECRET_KEY = 'This is an INSECURE secret!! DO NOT use this in production!!'
     SESSION_COOKIE_SECURE = True
     BOOTSTRAP_BOOTSWATCH_THEME = 'Simplex'
-    db_dir = "database/db.sqlite"
+    db_dir = "database/db2.sqlite"
     SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.abspath(db_dir)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     UPLOAD_FOLDER = './uploads'
