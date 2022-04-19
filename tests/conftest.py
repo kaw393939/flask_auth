@@ -13,13 +13,18 @@ def application():
     """This makes the app"""
     application = create_app()
     application.config.update(
-        ENV='testing',
+        #will save to the database file you can view
+        ENV='development',
+        #will save to memory / you can't see but runs fast
+        #ENV='testing',
+
     )
     with application.app_context():
         db.create_all()
         yield application
         db.session.remove()
-        db.drop_all()
+        #drops the database tables after the test runs
+        #db.drop_all()
 
 
 
