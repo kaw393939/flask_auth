@@ -26,6 +26,18 @@ def browse_locations(page):
     except TemplateNotFound:
         abort(404)
 
+@map.route('/locations/map', methods=['GET'])
+def map_locations():
+    google_api_key = current_app.config.get('GOOGLE_API_KEY')
+    log = logging.getLogger("myApp")
+    log.info(google_api_key)
+    try:
+        return render_template('map_locations.html',google_api_key=google_api_key)
+    except TemplateNotFound:
+        abort(404)
+
+
+
 @map.route('/locations/upload', methods=['POST', 'GET'])
 @login_required
 def location_upload():

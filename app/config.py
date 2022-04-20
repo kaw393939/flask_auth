@@ -1,6 +1,5 @@
 import os
 
-
 class Config(object):
     DEBUG = False
     TESTING = False
@@ -11,7 +10,7 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.abspath(db_dir)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     UPLOAD_FOLDER = './uploads'
-
+    GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 
 class ProductionConfig(Config):
     pass
