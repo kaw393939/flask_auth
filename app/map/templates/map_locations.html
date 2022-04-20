@@ -1,29 +1,61 @@
 {% extends "base.html" %}
-{% from 'bootstrap5/table.html' import render_table %}
-{% from "bootstrap5/pagination.html" import render_pagination %}
+<style>
+    #map {
+        height: 100%;
+    }
 
-
+</style>
 <div class="row col-8">
-    {% block title %}Browse: {{ record_type }}{% endblock %}
+    {% block title %}Map{% endblock %}
     {% block content %}
         <h2>Map</h2>
-        <div id="map"></div>
+        <div id="map" style="height: 500px; border: 1px solid;">
+
+        </div>
         <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 
         <script
-                src="https://maps.googleapis.com/maps/api/js?key={{google_api_key}}&callback=initMap&v=weekly"
-                defer
-        ></script>
+                src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&callback=initMap&v=weekly" defer>
+
+        </script>
+
         <script type=text/javascript>
             let map;
+            const myLatLng = {lat: -25.363, lng: 131.044};
 
             function initMap() {
-                map = new google.maps.Map(document.getElementById("map"), {
-                    center: {lat: -34.397, lng: 150.644},
-                    zoom: 8,
+
+                let xmlHttpReq = new XMLHttpRequest();
+                xmlHttpReq.open("GET", "/api/locations", false);
+                xmlHttpReq.send(null);
+                locations = JSON.parse(xmlHttpReq.responseText);
+                const myLatLng = {lat: parseFloat(locations["data"][0].lat), lng: parseFloat(locations["data"][0].long)};
+
+                 map = new google.maps.Map(document.getElementById("map"), {
+                    center: myLatLng,
+                    zoom: 5,
                 });
+                locations.data.forEach((item, index) => {
+                    const cord = {lat: parseFloat(item.lat), lng: parseFloat(item.long)};
+                    new google.maps.Marker({
+                            map,
+                            title: item.title,
+                            label: item.title,
+                            position: cord,
+                    });
+                });
+
+                new google.maps.Marker({
+                    position: myLatLng,
+                    map,
+                    title: "Hello World!",
+                    label: "test",
+                });
+
             }
 
+
+            console.log("test")
             window.initMap = initMap;
         </script>
 

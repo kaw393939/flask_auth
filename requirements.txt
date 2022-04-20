@@ -47,3 +47,4 @@ zipp==3.8.0
 rfc3339
 Faker
 python-dotenv
+SQLAlchemy-serializer
