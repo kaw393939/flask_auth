@@ -1,5 +1,7 @@
 """This makes the test configuration setup"""
 # pylint: disable=redefined-outer-name
+import logging
+import os
 
 import pytest
 from app import create_app, User
@@ -11,16 +13,13 @@ from app.db import db
 @pytest.fixture()
 def application():
     """This makes the app"""
+    os.environ['FLASK_ENV'] = 'testing'
     application = create_app()
-    application.config.update(
-        #will save to the database file you can view
-        ENV='testing',
-        #will save to memory / you can't see but runs fast
-        #ENV='testing',
 
-    )
     with application.app_context():
         db.create_all()
+        log = logging.getLogger('myApp')
+        log.info(application.config['SQLALCHEMY_DATABASE_URI'])
         yield application
         db.session.remove()
         #drops the database tables after the test runs
