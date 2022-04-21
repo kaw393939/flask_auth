@@ -15,7 +15,7 @@ from app.context_processors import utility_text_processors
 from app.db import db
 from app.db.models import User
 from app.error_handlers import error_handlers
-from app.logging_config import log_con
+from app.logging_config import log_con, LOGGING_CONFIG
 from app.simple_pages import simple_pages
 from app.songs import songs
 from app.map import map
@@ -55,8 +55,8 @@ def create_app():
     app.cli.add_command(create_database)
     app.cli.add_command(create_log_folder)
     db.init_app(app)
-    # Run once at startup:
 
+    # Run once at startup:
     return app
 
 
