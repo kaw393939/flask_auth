@@ -48,3 +48,4 @@ rfc3339
 Faker
 python-dotenv
 SQLAlchemy-serializer
+rfc3339
