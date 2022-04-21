@@ -14,7 +14,7 @@ def application():
     application = create_app()
     application.config.update(
         #will save to the database file you can view
-        ENV='development',
+        ENV='testing',
         #will save to memory / you can't see but runs fast
         #ENV='testing',
 

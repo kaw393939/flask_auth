@@ -37,7 +37,7 @@ LOGGING_CONFIG = {
         'standard': {
             'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
         },
-        
+
     },
     'handlers': {
         'default': {
