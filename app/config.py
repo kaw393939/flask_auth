@@ -9,8 +9,8 @@ class Config(object):
     db_dir = "database/db2.sqlite"
     SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.abspath(db_dir)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    UPLOAD_FOLDER = './uploads'
-    GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
+    UPLOAD_FOLDER =  os.getenv('UPLOAD_FOLDER','./uploads')
+    GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY','NOKEY')
 
 class ProductionConfig(Config):
     pass
