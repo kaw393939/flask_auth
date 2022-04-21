@@ -13,7 +13,7 @@ from app.db import db
 @pytest.fixture()
 def application():
     """This makes the app"""
-    os.environ['FLASK_ENV'] = 'testing'
+    os.environ['FLASK_ENV'] = 'development'
     application = create_app()
 
     with application.app_context():
@@ -21,7 +21,7 @@ def application():
         yield application
         db.session.remove()
         #drops the database tables after the test runs
-        db.drop_all()
+        #db.drop_all()
 
 @pytest.fixture()
 def add_user(application):
