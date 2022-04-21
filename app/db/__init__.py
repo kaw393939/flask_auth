@@ -1,3 +1,4 @@
+import logging
 import os
 
 from flask import Blueprint, cli
@@ -16,9 +17,9 @@ def init_db():
 @database.before_app_first_request
 def create_db_file_if_does_not_exist():
     root = config.Config.BASE_DIR
-
     # set the name of the apps log folder to logs
-    dbdir = os.path.join(root,config.Config.DB_DIR)
+    dbdir = os.path.join(root,'..',config.Config.DB_DIR)
+    print("hereitis" + dbdir)
     # make a directory if it doesn't exist
     if not os.path.exists(dbdir):
         os.mkdir(dbdir)

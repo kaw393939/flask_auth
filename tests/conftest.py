@@ -13,7 +13,7 @@ from app.db import db
 @pytest.fixture()
 def application():
     """This makes the app"""
-    os.environ['FLASK_ENV'] = 'testing'
+    os.environ['FLASK_ENV'] = 'development'
     application = create_app()
 
     with application.app_context():
