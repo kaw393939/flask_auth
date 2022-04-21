@@ -14,6 +14,12 @@ from app.db import db
 def application():
     """This makes the app"""
     os.environ['FLASK_ENV'] = 'testing'
+    root = os.path.dirname(os.path.abspath(__file__))
+    # set the name of the apps log folder to logs
+    logdir = os.path.join(root, '../logs')
+    # make a directory if it doesn't exist
+    if not os.path.exists(logdir):
+        os.mkdir(logdir)
     application = create_app()
 
     with application.app_context():
