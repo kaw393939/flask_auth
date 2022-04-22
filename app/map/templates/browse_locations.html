@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% from 'bootstrap5/table.html' import render_table %}
+{% from "bootstrap5/pagination.html" import render_pagination %}
+
+
+<div class="row col-8">
+    {% block title %}Browse: {{ record_type }}{% endblock %}
+    {% block content %}
+        <a href="{{ url_for("map.location_upload") }}" class="btn col-3 mb-5 btn-info" role="button">Upload Locations</a>
+        <h2>Browse: Locations</h2>
+        {{ render_table(data) }}
+        {% from 'bootstrap5/pagination.html' import render_pagination %}
+
+        {{ render_pagination(pagination) }}
+
+
+
+    {% endblock %}
+</div>
+
+
+

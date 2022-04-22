@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+<style>
+    #map {
+        border: 1px solid;
+    }
+
+</style>
+<div class="row col-8">
+    {% block title %}Map{% endblock %}
+    {% block content %}
+        <div id="mapcontent" class="container">
+            <h2>Map</h2>
+            <div id="map" style="height: 400px; ">
+
+            </div>
+        </div>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+        <script
+                src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&callback=initMap&v=weekly" defer>
+
+        </script>
+
+        <script type=text/javascript>
+            let map;
+
+            function initMap() {
+
+                let xmlHttpReq = new XMLHttpRequest();
+                xmlHttpReq.open("GET", "/api/locations", false);
+                xmlHttpReq.send(null);
+                locations = JSON.parse(xmlHttpReq.responseText);
+                const myLatLng = {
+                    lat: parseFloat(locations["data"][0].lat),
+                    lng: parseFloat(locations["data"][0].long)
+                };
+
+
+                map = new google.maps.Map(document.getElementById("map"), {
+                    center: myLatLng,
+                    zoom: 5,
+                });
+                locations.data.forEach((item, index) => {
+                    const cord = {lat: parseFloat(item.lat), lng: parseFloat(item.long)};
+                    let tooltip = '<h2>' + item.title + '</h2>' + 'Population: ' + item.population.toLocaleString("en-US");
+                    ;
+                    const infowindow = new google.maps.InfoWindow({
+                        content: tooltip,
+                        minWidth: 100,
+                        minHeight: 400,
+                    });
+
+                    let marker = new google.maps.Marker({
+                        map,
+                        title: tooltip,
+                        position: cord,
+                    });
+                    marker.addListener("mouseover", () => {
+                        infowindow.open({
+                            anchor: marker,
+                            map,
+                            shouldFocus: false,
+                        });
+                    });
+                    marker.addListener('mouseout', function () {
+                        infowindow.close();
+                    });
+                });
+            }
+
+
+            console.log("test")
+            window.initMap = initMap;
+        </script>
+
+
+
+    {% endblock %}
+</div>
+
+
+

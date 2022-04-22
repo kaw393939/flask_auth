@@ -12,6 +12,8 @@
         {% endblock %}
 
         <title>My Site - {% block title %}{% endblock %}</title>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+
     {% endblock %}
 </head>
 <body>
@@ -33,14 +35,10 @@
                     <div class="navbar-nav mr-auto">
                         {% if current_user.is_authenticated %}
                             {{ render_nav_item('auth.dashboard','Dashboard' ) }}
-                            {% if current_user.is_admin %}
-                                {{ render_nav_item('auth.browse_users','User Management' ) }}
-                            {% endif %}
-
                         {% else %}
                             {{ render_nav_item('simple_pages.index', 'Home') }}
                         {% endif %}
-
+                        {{ render_nav_item('map.map_locations','Map' ) }}
                         {{ render_nav_item('simple_pages.about','About') }}
                         {{ render_nav_item('simple_pages.welcome','Welcome') }}
                     </div>
@@ -53,8 +51,18 @@
                                 My Account
                             </a>
                             <ul class="dropdown-menu " aria-labelledby="navbarDarkDropdownMenuLink">
-                                <li><a class="dropdown-item" href="{{ url_for("auth.edit_profile") }}">Manage Profile</a></li>
-                                <li><a class="dropdown-item" href="{{ url_for("auth.edit_account") }}">Manage Account</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for("auth.edit_profile") }}">Manage
+                                    Profile</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for("auth.edit_account") }}">Manage
+                                    Account</a></li>
+                                {% if current_user.is_admin %}
+                                    <li><a class="dropdown-item" href="{{ url_for("auth.browse_users") }}">User Mgmt</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for("map.browse_locations") }}">Loc Mgmt</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for("songs.songs_browse") }}">Song Mgmt</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for("map.browse_locations_datatables") }}">Loc Mgmt(dt)</a></li>
+
+
+                                {% endif %}
                                 <li><a class="dropdown-item" href="{{ url_for("auth.logout") }}">Logout</a></li>
                             </ul>
                         </li>
@@ -77,9 +85,13 @@
     </div>
 </div>
 
+
+
+
 {% block scripts %}
     <!-- Optional JavaScript -->
     {{ bootstrap.load_js() }}
+
 {% endblock %}
 <footer class="text-center mt-5">
     Environment: {{ deployment_environment }} - Copyright: {{ year }} {{ format_price(100) }}

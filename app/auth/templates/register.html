@@ -3,12 +3,148 @@
     {% from 'bootstrap5/form.html' import render_form, render_field, render_form_row %}
 
     <div class="row">
+        <div class="col-7">
+            <h2>Register</h2>
+            {{ render_form(form) }}
+        </div>
+        <div id="message" class="col-5">
+            <div id="letter" class="red">
+                Has lower case letter
+                <div class="progress">
+                    <div id="p-bar" class="progress-bar" style="width: 0%" role="progressbar" aria-valuenow="0"
+                         aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
 
-         <div class="col-7 mx-auto">
-             <h2>Register</h2>
-             {{ render_form(form) }}
-         </div>
+        </div>
     </div>
+    <style>
+        .invalid {
+            color: red;
+        }
 
+        .valid {
+            color: green;
+        }
+    </style>
+
+
+    <script>
+        var passwordField = document.getElementById("password");
+        var letter = document.getElementById("letter");
+        let lowerCase = new Observable(0);
+        let upperCase = new Observable(0);
+        let specialCharacter = new Observable(0);
+        let passwordLength = new Observable(0);
+
+        let id = "p-bar";
+
+        function Observable(v) {
+            this.value = v;
+
+            this.valueChangedCallback = null;
+
+            this.setValue = function (v) {
+                if (this.value !== v) {
+                    this.value = v;
+                    this.raiseChangedEvent(v);
+                }
+            };
+
+            this.getValue = function () {
+                return this.value;
+            };
+
+            this.onChange = function (callback) {
+                this.valueChangedCallback = callback;
+            };
+
+            this.raiseChangedEvent = function (v) {
+                if (this.valueChangedCallback) {
+                    this.valueChangedCallback(v);
+                }
+            };
+        }
+
+        function setProgressBarWidth(id,change) {
+            let progress_bar = document.getElementById(id);
+            let progressBarCurrentWidth_string = progress_bar.style.width.toString()
+            let width_current_value = parseInt(progressBarCurrentWidth_string.substring(0, progressBarCurrentWidth_string.length - 1));
+
+            let width_string_new_value = width_current_value + change;
+            console.log(width_string_new_value);
+            progress_bar.style.width = width_string_new_value.toString().concat("%");
+        }
+
+        lowerCase.onChange(function (v) {
+
+            if(v === 0) {
+                setProgressBarWidth(id,-25)
+            } else {
+                setProgressBarWidth(id,+25)
+            }
+        });
+
+        passwordLength.onChange(function (v) {
+
+            if(v === 0) {
+                setProgressBarWidth(id,-25)
+            } else {
+                setProgressBarWidth(id,+25)
+            }
+        });
+
+        upperCase.onChange(function (v) {
+
+            if(v === 0) {
+                setProgressBarWidth(id,-25)
+            } else {
+                setProgressBarWidth(id,+25)
+            }
+        });
+
+        specialCharacter.onChange(function (v) {
+
+            if(v === 0) {
+                setProgressBarWidth(id,-25)
+            } else {
+                setProgressBarWidth(id,+25)
+            }
+        });
+
+
+        passwordField.onkeyup = function () {
+            // Validate lowercase letters
+            let lowerCaseLetters = /[a-z]/g;
+            let upperCaseLetters = /[A-Z]/g;
+            let specialCharacters = /[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi;
+            let passwordMinLength = 6;
+
+            if(passwordField.value.length >= passwordMinLength) {
+                passwordLength.setValue(1);
+            } else {
+                passwordLength.setValue(0);
+            }
+
+            if (passwordField.value.match(lowerCaseLetters)) {
+                lowerCase.setValue(1);
+            } else {
+                lowerCase.setValue(0);
+            }
+            if (passwordField.value.match(upperCaseLetters)) {
+                upperCase.setValue(1);
+            } else {
+                upperCase.setValue(0);
+            }
+            if (passwordField.value.match(specialCharacters)) {
+                specialCharacter.setValue(1);
+            } else {
+                specialCharacter.setValue(0);
+            }
+
+        }
+
+
+    </script>
 
 {% endblock %}
