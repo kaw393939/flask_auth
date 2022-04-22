@@ -20,7 +20,7 @@ from app.simple_pages import simple_pages
 from app.songs import songs
 from app.map import map
 from app.db import database
-
+from flask_cors import CORS
 login_manager = flask_login.LoginManager()
 
 
@@ -55,7 +55,10 @@ def create_app():
     # add command function to cli commands
     app.cli.add_command(create_database)
     db.init_app(app)
-
+    api_v1_cors_config = {
+    "methods": ["OPTIONS", "GET", "POST"],
+    }
+    CORS(app, resources={"/api/*": api_v1_cors_config})
     # Run once at startup:
     return app
 
