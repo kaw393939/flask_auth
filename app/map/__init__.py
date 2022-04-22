@@ -41,9 +41,8 @@ def browse_locations_datatables():
 @map.route('/api/locations/', methods=['GET'])
 def api_locations():
     data = Location.query.all()
-    data = jsonify(data=[location.serialize() for location in data])
     try:
-        return data
+        return jsonify(data=[location.serialize() for location in data])
     except TemplateNotFound:
         abort(404)
 
