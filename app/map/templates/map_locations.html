@@ -43,7 +43,7 @@
                 locations.data.forEach((item, index) => {
                     const cord = {lat: parseFloat(item.lat), lng: parseFloat(item.long)};
                     let tooltip = '<h2>' + item.title + '</h2>' + 'Population: ' + item.population.toLocaleString("en-US");
-                    ;
+
                     const infowindow = new google.maps.InfoWindow({
                         content: tooltip,
                         minWidth: 100,
@@ -69,7 +69,6 @@
             }
 
 
-            console.log("test")
             window.initMap = initMap;
         </script>
 
