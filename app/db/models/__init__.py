@@ -65,10 +65,11 @@ class User(UserMixin, db.Model):
     locations = db.relationship("Location",
                     secondary=location_user, backref="users")
 
-    def __init__(self, email, password):
+    def __init__(self, email, password, is_admin):
         self.email = email
         self.password = password
         self.registered_on = datetime.utcnow()
+        self.is_admin = is_admin
 
     def is_authenticated(self):
         return True

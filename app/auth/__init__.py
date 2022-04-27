@@ -7,7 +7,7 @@ from sqlalchemy import select
 from werkzeug.security import generate_password_hash
 
 from app.auth.decorators import admin_required
-from app.auth.forms import login_form, register_form, profile_form, security_form, user_edit_form
+from app.auth.forms import login_form, register_form, profile_form, security_form, user_edit_form, create_user_form
 from app.db import db
 from app.db.models import User, Location, location_user
 
@@ -164,11 +164,11 @@ def edit_user(user_id):
 @auth.route('/users/new', methods=['POST', 'GET'])
 @login_required
 def add_user():
-    form = register_form()
+    form = create_user_form()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user is None:
-            user = User(email=form.email.data, password=generate_password_hash(form.password.data))
+            user = User(email=form.email.data, password=generate_password_hash(form.password.data), is_admin=int(form.is_admin.data))
             db.session.add(user)
             db.session.commit()
             flash('Congratulations, you just created a user', 'success')
