@@ -1,10 +1,12 @@
 """A simple flask web app"""
+import logging
 import os
 
 import flask_login
 from flask import Flask
 from flask_bootstrap import Bootstrap5
 from flask_cors import CORS
+from flask_mail import Mail
 from flask_wtf.csrf import CSRFProtect
 
 from app.auth import auth
@@ -19,6 +21,7 @@ from app.logging_config import log_con, LOGGING_CONFIG
 from app.map import map
 from app.simple_pages import simple_pages
 from app.songs import songs
+mail = Mail()
 
 login_manager = flask_login.LoginManager()
 
@@ -32,10 +35,12 @@ def create_app():
         app.config.from_object("app.config.DevelopmentConfig")
     elif os.environ.get("FLASK_ENV") == "testing":
         app.config.from_object("app.config.TestingConfig")
+    app.mail = Mail(app)
 
     # https://flask-login.readthedocs.io/en/latest/  <-login manager
     login_manager.init_app(app)
     login_manager.login_view = "auth.login"
+
     # Needed for CSRF protection of form submissions and WTF Forms
     # https://wtforms.readthedocs.io/en/3.0.x/
     csrf = CSRFProtect(app)
@@ -55,7 +60,7 @@ def create_app():
     app.cli.add_command(create_database)
     db.init_app(app)
     api_v1_cors_config = {
-    "methods": ["OPTIONS", "GET", "POST"],
+        "methods": ["OPTIONS", "GET", "POST"],
     }
     CORS(app, resources={"/api/*": api_v1_cors_config})
     # Run once at startup:

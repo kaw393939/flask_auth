@@ -10,6 +10,7 @@ from app.auth.decorators import admin_required
 from app.auth.forms import login_form, register_form, profile_form, security_form, user_edit_form, create_user_form
 from app.db import db
 from app.db.models import User, Location, location_user
+from flask_mail import Message
 
 auth = Blueprint('auth', __name__, template_folder='templates')
 
@@ -22,15 +23,23 @@ def register():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user is None:
-            user = User(email=form.email.data, password=generate_password_hash(form.password.data))
+            user = User(email=form.email.data, password=generate_password_hash(form.password.data), is_admin=0)
             db.session.add(user)
             db.session.commit()
             if user.id == 1:
                 user.is_admin = 1
                 db.session.add(user)
                 db.session.commit()
+
+            msg = Message("Hello",
+                          sender="from@example.com",
+                          recipients=["to@example.com"])
+
+            current_app.mail.send(msg)
             flash('Congratulations, you are now a registered user!', "success")
+
             return redirect(url_for('auth.login'), 302)
+
         else:
             flash('Already Registered')
             return redirect(url_for('auth.login'), 302)
