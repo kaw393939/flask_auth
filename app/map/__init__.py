@@ -68,17 +68,14 @@ def location_upload():
         list_of_locations = []
         with open(filepath) as file:
             csv_file = csv.DictReader(file)
-            list_of_locations = []
             for row in csv_file:
                 location = Location.query.filter_by(title=row['location']).first()
                 if location is None:
-                    list_of_locations.append(Location(row['location'],row['longitude'],row['latitude'],row['population']))
+                    current_user.locations.append(Location(row['location'],row['longitude'],row['latitude'],row['population']))
+                    db.session.commit()
                 else:
-                    location.users.append([location])
-
-        current_user.locations = list_of_locations
-        db.session.commit()
-
+                    current_user.locations.append(location)
+                    db.session.commit()
         return redirect(url_for('map.browse_locations'))
 
     try:

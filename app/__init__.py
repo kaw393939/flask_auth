@@ -10,7 +10,6 @@ from flask_mail import Mail
 from flask_wtf.csrf import CSRFProtect
 
 from app.auth import auth
-from app.auth import auth
 from app.cli import create_database
 from app.context_processors import utility_text_processors
 from app.db import database
@@ -21,6 +20,7 @@ from app.logging_config import log_con, LOGGING_CONFIG
 from app.map import map
 from app.simple_pages import simple_pages
 from app.songs import songs
+
 mail = Mail()
 
 login_manager = flask_login.LoginManager()

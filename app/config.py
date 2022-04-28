@@ -19,6 +19,8 @@ class Config(object):
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD','NOKEY')
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False
+    MAIL_DEFAULT_SENDER = os.getenv('MAIL_DEFAULT_SENDER','noreply@myapp.com')
+
 
 class ProductionConfig(Config):
     pass
