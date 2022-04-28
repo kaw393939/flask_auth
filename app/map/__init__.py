@@ -73,6 +73,9 @@ def location_upload():
                 location = Location.query.filter_by(title=row['location']).first()
                 if location is None:
                     list_of_locations.append(Location(row['location'],row['longitude'],row['latitude'],row['population']))
+                else:
+                    location.users.append([location])
+
         current_user.locations = list_of_locations
         db.session.commit()
 
